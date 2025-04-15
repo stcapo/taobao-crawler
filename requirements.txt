@@ -1,0 +1,8 @@
+pyquery
+selenium
+openpyxl
+pandas
+Flask
+matplotlib
+wordcloud
+jieba
