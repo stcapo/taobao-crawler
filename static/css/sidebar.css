@@ -1,0 +1,76 @@
+/* 侧边栏样式 */
+.sidebar {
+    width: 280px;
+    background: linear-gradient(180deg, #2c3e50 0%, #1a2a38 100%);
+    color: #ecf0f1;
+    padding: 20px 0;
+    overflow-y: auto;
+    transition: all 0.3s;
+    position: fixed;
+    height: 100vh;
+    z-index: 100;
+}
+
+.brand {
+    text-align: center;
+    padding: 20px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 20px;
+}
+
+.brand h2 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.brand p {
+    font-size: 12px;
+    opacity: 0.7;
+    margin-top: 5px;
+}
+
+.menu-items {
+    padding: 0 15px;
+}
+
+.menu-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #3498db;
+    margin-bottom: 10px;
+    padding-left: 10px;
+}
+
+.menu-item {
+    padding: 14px 16px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.menu-item:hover {
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+.menu-item.active {
+    background-color: #3498db;
+}
+
+.menu-item .menu-icon {
+    margin-right: 12px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-item .menu-text {
+    font-size: 14px;
+    font-weight: 500;
+}

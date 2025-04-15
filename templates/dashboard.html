@@ -1,138 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Visualization Dashboard</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            height: 100vh;
-        }
-        .sidebar {
-            width: 250px;
-            background-color: #333;
-            color: white;
-            padding: 1rem;
-            box-sizing: border-box;
-        }
-        .sidebar h2 {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        .menu-item {
-            padding: 0.75rem 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .menu-item:hover, .menu-item.active {
-            background-color: #555;
-        }
-        .content {
-            flex: 1;
-            padding: 2rem;
-            background-color: #f7f7f7;
-            overflow-y: auto;
-        }
-        .chart-container {
-            background-color: white;
-            padding: 1.5rem;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        .chart-title {
-            margin-top: 0;
-            margin-bottom: 1.5rem;
-            color: #333;
-        }
-        .chart-img {
-            max-width: 100%;
-            height: auto;
-        }
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 300px;
-            font-size: 1.2rem;
-            color: #777;
-        }
-    </style>
+    <title>电商数据分析平台</title>
+    
+    <!-- CSS 文件 -->
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/sidebar.css">
+    <link rel="stylesheet" href="/static/css/charts.css">
+    
+    <!-- 引入 ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <!-- 引入 echarts-wordcloud 扩展 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2.1.0/dist/echarts-wordcloud.min.js"></script>
 </head>
 <body>
-    <div class="sidebar">
-        <h2>Data Visualization</h2>
-        <div class="menu-item" data-chart="chart1">1. 商品销量排行</div>
-        <div class="menu-item" data-chart="chart2">2. 商品价格分布</div>
-        <div class="menu-item" data-chart="chart3">3. 店铺销量/销售额排行</div>
-        <div class="menu-item" data-chart="chart4">4. 地域分布</div>
-        <div class="menu-item" data-chart="chart5">5. 包邮 vs 非包邮的销量比较</div>
-        <div class="menu-item" data-chart="chart6">6. 总销售额分析</div>
-        <div class="menu-item" data-chart="chart7">7. 标题关键词分析</div>
-    </div>
-    <div class="content">
-        <div class="chart-container">
-            <h3 class="chart-title">选择左侧菜单项查看图表</h3>
-            <div id="chart-display" class="loading">
-                请选择要查看的图表
+    <div class="dashboard">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="brand">
+                <h2>电商数据分析</h2>
+                <p>销售数据可视化平台</p>
+            </div>
+            <div class="menu-items">
+                <p class="menu-title">数据分析</p>
+                <div class="menu-item active" data-chart="chart1">
+                    <div class="menu-icon">📊</div>
+                    <div class="menu-text">商品销量排行</div>
+                </div>
+                <div class="menu-item" data-chart="chart2">
+                    <div class="menu-icon">📉</div>
+                    <div class="menu-text">商品价格分布</div>
+                </div>
+                <div class="menu-item" data-chart="chart3">
+                    <div class="menu-icon">🏪</div>
+                    <div class="menu-text">店铺销量/销售额排行</div>
+                </div>
+                <div class="menu-item" data-chart="chart4">
+                    <div class="menu-icon">🗺️</div>
+                    <div class="menu-text">地域分布</div>
+                </div>
+                <div class="menu-item" data-chart="chart5">
+                    <div class="menu-icon">🚚</div>
+                    <div class="menu-text">包邮 vs 非包邮</div>
+                </div>
+                <div class="menu-item" data-chart="chart6">
+                    <div class="menu-icon">💰</div>
+                    <div class="menu-text">总销售额分析</div>
+                </div>
+                <div class="menu-item" data-chart="chart7">
+                    <div class="menu-icon">🔤</div>
+                    <div class="menu-text">标题关键词分析</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <div class="header">
+                <div class="page-title">
+                    <h1>销售数据分析仪表板</h1>
+                </div>
+                <div class="user-info">
+                    <span>欢迎, admin</span>
+                    <button class="logout-btn" onclick="window.location.href='/'">退出登录</button>
+                </div>
+            </div>
+            
+            <!-- 图表容器 -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <div>
+                        <h3 class="chart-title" id="currentChartTitle">商品销量排行</h3>
+                        <p class="chart-description" id="currentChartDesc">展示销量最高的商品</p>
+                    </div>
+                </div>
+                <div id="mainChart" class="chart">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <span>加载中...</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuItems = document.querySelectorAll('.menu-item');
-            const chartDisplay = document.getElementById('chart-display');
-            const chartTitle = document.querySelector('.chart-title');
-            
-            const chartTitles = {
-                'chart1': '商品销量排行（柱状图）',
-                'chart2': '商品价格分布（箱线图）',
-                'chart3': '店铺销量/销售额排行（条形图）',
-                'chart4': '地域分布（店铺所在地，柱状图）',
-                'chart5': '包邮 vs 非包邮的销量比较（饼图）',
-                'chart6': '总销售额分析（Price × Deal，柱状图）',
-                'chart7': '标题关键词分析（词云）'
-            };
-            
-            function loadChart(chartId) {
-                chartDisplay.innerHTML = 'Loading...';
-                chartTitle.textContent = chartTitles[chartId];
-                
-                menuItems.forEach(item => {
-                    item.classList.remove('active');
-                    if (item.dataset.chart === chartId) {
-                        item.classList.add('active');
-                    }
-                });
-                
-                fetch('/' + chartId)
-                    .then(response => response.json())
-                    .then(data => {
-                        const timestamp = new Date().getTime();
-                        chartDisplay.innerHTML = `<img class="chart-img" src="${data.chart}?t=${timestamp}" alt="${chartTitles[chartId]}">`;
-                    })
-                    .catch(error => {
-                        console.error('Error loading chart:', error);
-                        chartDisplay.innerHTML = 'Error loading chart. Please try again.';
-                    });
-            }
-            
-            menuItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    const chartId = this.dataset.chart;
-                    loadChart(chartId);
-                });
-            });
-            
-            loadChart('chart1');
-        });
-    </script>
+    
+    <!-- JavaScript 文件 -->
+    <script src="/static/js/charts.js"></script>
+    <script src="/static/js/main.js"></script>
 </body>
 </html>
