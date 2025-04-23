@@ -1,9 +1,67 @@
 // 渲染图表函数
 function renderChart(chartId, data, chart) {
     let option = {};
-    
+
     // 商品销量排行
     if (chartId === 'chart1') {
+        // 创建商品详情列表
+        if (data.product_details && data.product_details.length > 0) {
+            // 获取产品详情容器
+            const productDetailsContainer = document.getElementById('product-details-container');
+            if (productDetailsContainer) {
+                // 清除容器内容
+                productDetailsContainer.innerHTML = '';
+
+                // 创建标题
+                const title = document.createElement('h3');
+                title.className = 'product-list-title';
+                title.textContent = '商品详情列表';
+                productDetailsContainer.appendChild(title);
+
+                // 创建表格
+                const table = document.createElement('table');
+                table.className = 'product-list-table';
+
+                // 创建表头
+                const thead = document.createElement('thead');
+                const headerRow = document.createElement('tr');
+
+                const idHeader = document.createElement('th');
+                idHeader.textContent = '编号';
+                idHeader.className = 'product-id-cell';
+
+                const titleHeader = document.createElement('th');
+                titleHeader.textContent = '商品名称';
+
+                headerRow.appendChild(idHeader);
+                headerRow.appendChild(titleHeader);
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+
+                // 创建表体
+                const tbody = document.createElement('tbody');
+
+                // 添加数据行
+                data.product_details.forEach(product => {
+                    const row = document.createElement('tr');
+
+                    const idCell = document.createElement('td');
+                    idCell.textContent = product.id;
+                    idCell.className = 'product-id-cell';
+
+                    const titleCell = document.createElement('td');
+                    titleCell.textContent = product.title;
+
+                    row.appendChild(idCell);
+                    row.appendChild(titleCell);
+                    tbody.appendChild(row);
+                });
+
+                table.appendChild(tbody);
+                productDetailsContainer.appendChild(table);
+            }
+        }
+
         option = {
             tooltip: {
                 trigger: 'axis',
@@ -252,9 +310,30 @@ function renderChart(chartId, data, chart) {
     // 总销售额分析
     else if (chartId === 'chart6') {
         option = {
+            title: {
+                text: '垂钓饵料相关商品最近12个月销售额趋势',
+                left: 'center'
+            },
             tooltip: {
                 trigger: 'axis',
-                axisPointer: { type: 'shadow' }
+                axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                        color: '#999'
+                    }
+                }
+            },
+            toolbox: {
+                feature: {
+                    dataView: { show: true, readOnly: false },
+                    magicType: { show: true, type: ['line', 'bar'] },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
+                }
+            },
+            legend: {
+                data: ['总销售额', '环比增长'],
+                top: 30
             },
             grid: {
                 left: '3%',
@@ -262,22 +341,58 @@ function renderChart(chartId, data, chart) {
                 bottom: '3%',
                 containLabel: true
             },
-            xAxis: {
-                type: 'category',
-                data: data.categories,
-                axisLabel: { rotate: 45 }
-            },
-            yAxis: { type: 'value', name: '商品数量' },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: data.xAxis.data,
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    axisLabel: {
+                        rotate: 45
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    name: '销售额',
+                    min: 0,
+                    axisLabel: {
+                        formatter: '{value} 元'
+                    }
+                },
+                {
+                    type: 'value',
+                    name: '增长率',
+                    axisLabel: {
+                        formatter: '{value} %'
+                    }
+                }
+            ],
             series: [
                 {
-                    name: '商品数量',
-                    type: 'bar',
+                    name: '总销售额',
+                    type: 'line',
+                    smooth: true,
                     data: data.series[0].data,
+                    markPoint: data.series[0].markPoint,
+                    markLine: data.series[0].markLine,
+                    areaStyle: {},
                     itemStyle: {
-                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                            { offset: 0, color: '#f39c12' },
-                            { offset: 1, color: '#d35400' }
-                        ])
+                        color: '#3498db'
+                    }
+                },
+                {
+                    name: '环比增长',
+                    type: 'bar',
+                    yAxisIndex: 1,
+                    data: data.series[1].data,
+                    itemStyle: {
+                        color: function(params) {
+                            // 根据正负值显示不同颜色
+                            return params.value >= 0 ? '#2ecc71' : '#e74c3c';
+                        }
                     }
                 }
             ]
@@ -316,9 +431,9 @@ function renderChart(chartId, data, chart) {
                     fontFamily: 'sans-serif',
                     fontWeight: 'bold',
                     color: function() {
-                        return 'rgb(' + 
-                            Math.round(Math.random() * 200) + ',' + 
-                            Math.round(Math.random() * 200) + ',' + 
+                        return 'rgb(' +
+                            Math.round(Math.random() * 200) + ',' +
+                            Math.round(Math.random() * 200) + ',' +
                             Math.round(Math.random() * 200) + ')';
                     }
                 },
@@ -338,7 +453,7 @@ function renderChart(chartId, data, chart) {
             }]
         };
     }
-    
+
     // 设置图表
     chart.setOption(option, true);
 }

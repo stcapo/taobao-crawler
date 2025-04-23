@@ -50,3 +50,53 @@
     animation: spin 1s linear infinite;
     margin-right: 10px;
 }
+
+/* 产品详情列表样式 */
+#product-details-container {
+    margin-top: 30px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.product-list-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #34495e;
+    margin-bottom: 15px;
+}
+
+.product-list-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.product-list-table th {
+    background-color: #f8f9fa;
+    padding: 10px;
+    text-align: left;
+    border-bottom: 2px solid #ddd;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.product-list-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+    color: #333;
+}
+
+.product-list-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+.product-id-cell {
+    width: 60px;
+    font-weight: 600;
+    color: #3498db;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

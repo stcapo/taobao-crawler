@@ -10,7 +10,7 @@
             margin: 0;
             padding: 0;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -19,7 +19,7 @@
             justify-content: center;
             align-items: center;
         }
-        
+
         .login-container {
             background-color: rgba(255, 255, 255, 0.95);
             border-radius: 10px;
@@ -29,33 +29,33 @@
             max-width: 400px;
             animation: fadeIn 0.5s ease-in-out;
         }
-        
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+
         .login-header {
             text-align: center;
             margin-bottom: 30px;
         }
-        
+
         .login-header h1 {
             color: #4a4a4a;
             font-size: 28px;
             font-weight: 600;
             margin-bottom: 5px;
         }
-        
+
         .login-header p {
             color: #777;
             font-size: 14px;
         }
-        
+
         .form-group {
             margin-bottom: 20px;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 8px;
@@ -63,7 +63,7 @@
             font-size: 14px;
             font-weight: 500;
         }
-        
+
         .form-group input {
             width: 100%;
             padding: 12px 15px;
@@ -72,13 +72,13 @@
             font-size: 14px;
             transition: border-color 0.3s;
         }
-        
+
         .form-group input:focus {
             border-color: #667eea;
             outline: none;
             box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
         }
-        
+
         .login-button {
             width: 100%;
             padding: 12px;
@@ -91,16 +91,16 @@
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
         }
-        
+
         .login-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-        
+
         .login-button:active {
             transform: translateY(0);
         }
-        
+
         .error-message {
             background-color: #ffe5e5;
             color: #e74c3c;
@@ -110,34 +110,151 @@
             text-align: center;
             font-size: 14px;
         }
+
+        .success-message {
+            background-color: #e5ffe5;
+            color: #2ecc71;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .form-toggle {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .form-toggle a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .form-toggle a:hover {
+            text-decoration: underline;
+        }
+
+        .form-container {
+            display: none;
+        }
+
+        .form-container.active {
+            display: block;
+        }
+
+        .captcha-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .captcha-question {
+            flex-grow: 1;
+            background-color: #f5f5f5;
+            padding: 12px 15px;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
     <div class="login-container">
         <div class="login-header">
             <h1>电商数据分析系统</h1>
-            <p>请登录以访问数据可视化仪表板</p>
+            <p>请登录或注册以访问数据可视化仪表板</p>
         </div>
-        
+
         {% if get_flashed_messages() %}
         <div class="error-message">
             {{ get_flashed_messages()[0] }}
         </div>
         {% endif %}
-        
-        <form method="post">
-            <div class="form-group">
-                <label for="username">用户名</label>
-                <input type="text" id="username" name="username" placeholder="输入用户名" required>
+
+        <!-- Login Form -->
+        <div id="login-form" class="form-container active">
+            <form method="post">
+                <input type="hidden" name="login" value="true">
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" id="username" name="username" placeholder="输入用户名" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" id="password" name="password" placeholder="输入密码" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="captcha">验证码</label>
+                    <div class="captcha-container">
+                        <div class="captcha-question">{{ captcha_question }}</div>
+                        <input type="text" id="captcha" name="captcha" placeholder="答案" required style="width: 80px;">
+                    </div>
+                </div>
+
+                <button type="submit" class="login-button">登录</button>
+            </form>
+
+            <div class="form-toggle">
+                没有账号? <a onclick="toggleForm()">立即注册</a>
             </div>
-            
-            <div class="form-group">
-                <label for="password">密码</label>
-                <input type="password" id="password" name="password" placeholder="输入密码" required>
+        </div>
+
+        <!-- Registration Form -->
+        <div id="register-form" class="form-container">
+            <form method="post" action="/register">
+                <div class="form-group">
+                    <label for="reg-username">用户名</label>
+                    <input type="text" id="reg-username" name="username" placeholder="创建用户名" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-email">邮箱</label>
+                    <input type="email" id="reg-email" name="email" placeholder="输入邮箱" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-password">密码</label>
+                    <input type="password" id="reg-password" name="password" placeholder="创建密码" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-confirm-password">确认密码</label>
+                    <input type="password" id="reg-confirm-password" name="confirm_password" placeholder="确认密码" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-captcha">验证码</label>
+                    <div class="captcha-container">
+                        <div class="captcha-question">{{ captcha_question }}</div>
+                        <input type="text" id="reg-captcha" name="captcha" placeholder="答案" required style="width: 80px;">
+                    </div>
+                </div>
+
+                <button type="submit" class="login-button">注册</button>
+            </form>
+
+            <div class="form-toggle">
+                已有账号? <a onclick="toggleForm()">立即登录</a>
             </div>
-            
-            <button type="submit" class="login-button">登录</button>
-        </form>
+        </div>
     </div>
+
+    <script>
+        function toggleForm() {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+
+            loginForm.classList.toggle('active');
+            registerForm.classList.toggle('active');
+        }
+    </script>
 </body>
 </html>

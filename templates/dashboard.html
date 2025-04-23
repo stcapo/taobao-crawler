@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>电商数据分析平台</title>
-    
+
     <!-- CSS 文件 -->
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/sidebar.css">
     <link rel="stylesheet" href="/static/css/charts.css">
-    
+
     <!-- 引入 ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <!-- 引入 echarts-wordcloud 扩展 -->
@@ -41,10 +41,10 @@
                     <div class="menu-icon">🗺️</div>
                     <div class="menu-text">地域分布</div>
                 </div>
-                <div class="menu-item" data-chart="chart5">
-                    <div class="menu-icon">🚚</div>
-                    <div class="menu-text">包邮 vs 非包邮</div>
-                </div>
+<!--                <div class="menu-item" data-chart="chart5">-->
+<!--                    <div class="menu-icon">🚚</div>-->
+<!--                    <div class="menu-text">包邮 vs 非包邮</div>-->
+<!--                </div>-->
                 <div class="menu-item" data-chart="chart6">
                     <div class="menu-icon">💰</div>
                     <div class="menu-text">总销售额分析</div>
@@ -55,7 +55,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- 主内容区 -->
         <div class="main-content">
             <div class="header">
@@ -63,11 +63,11 @@
                     <h1>销售数据分析仪表板</h1>
                 </div>
                 <div class="user-info">
-                    <span>欢迎, admin</span>
-                    <button class="logout-btn" onclick="window.location.href='/'">退出登录</button>
+                    <span>欢迎, {{ username }}</span>
+                    <button class="logout-btn" onclick="window.location.href='/logout'">退出登录</button>
                 </div>
             </div>
-            
+
             <!-- 图表容器 -->
             <div class="chart-container">
                 <div class="chart-header">
@@ -82,10 +82,12 @@
                         <span>加载中...</span>
                     </div>
                 </div>
+                <!-- 产品详情列表容器 -->
+                <div id="product-details-container"></div>
             </div>
         </div>
     </div>
-    
+
     <!-- JavaScript 文件 -->
     <script src="/static/js/charts.js"></script>
     <script src="/static/js/main.js"></script>
